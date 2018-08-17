@@ -2,10 +2,12 @@ package com.tsm.template.controller;
 
 
 import com.tsm.template.exceptions.BadRequestException;
+import com.tsm.template.mappers.IBaseMapper;
 import com.tsm.template.model.BaseModel;
 import com.tsm.template.model.SearchCriteria;
 import com.tsm.template.service.BaseService;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 
@@ -29,6 +31,11 @@ public abstract class RestBaseController<R, M extends BaseModel, I extends Seria
     private static final String STATUS_KEY = "status";
 
     @Autowired
+    private ModelMapper modelMapper;
+
+    protected abstract IBaseMapper getMapper();
+
+    @Autowired
     private Validator validator;
 
     protected <T> void validate(final T object, Class clazz) {
@@ -46,15 +53,11 @@ public abstract class RestBaseController<R, M extends BaseModel, I extends Seria
 
         validate(resource, Default.class);
 
-        //M model = getParser().toModel(resource);
-
-        M model = null;
+        M model = (M) getMapper().toModel(resource);
 
         model = getService().save(model);
 
-        //R result = getParser().toResource(model);
-
-        R result = null;
+        R result = (R) getMapper().toDTO(model);
 
         log.debug("returning resource [{}].", result);
 
