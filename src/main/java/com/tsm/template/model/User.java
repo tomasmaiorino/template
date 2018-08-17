@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "send_user")
+@Table(name = "user")
 public class User extends BaseModel {
 
 	private User() {
