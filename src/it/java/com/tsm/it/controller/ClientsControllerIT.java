@@ -63,7 +63,7 @@ public class ClientsControllerIT extends BaseTestIT {
 		given().body(resource).contentType(ContentType.JSON).when().post(CLIENTS_URL_POST).then()
 				.statusCode(HttpStatus.FORBIDDEN.value());
 	}
-	
+
 	@Test
 	public void save_InvalidTokenGiven_ShouldReturnError() {
 		// Set Up
@@ -272,7 +272,7 @@ public class ClientsControllerIT extends BaseTestIT {
 	@Test
 	public void save_ValidResourceWithAttributesGiven_ShouldSaveClient() {
 		// Set Up
-		ClientResource resource = ClientResource.build().attributes().assertFields();
+		ClientResource resource = ClientResource.build().assertFields();
 
 		// Do Test
 		given().headers(getTokenHeader()).body(resource).contentType(ContentType.JSON).when().post(CLIENTS_URL_POST)
@@ -285,7 +285,7 @@ public class ClientsControllerIT extends BaseTestIT {
 	@Test
 	public void save_ValidResourceWithOneInvalidAttributeGiven_ShouldSaveClient() {
 		// Set Up
-		ClientResource resource = ClientResource.build().attributes(3).assertFields();
+		ClientResource resource = ClientResource.build().assertFields();
 		resource.getAttributes().entrySet().iterator().next().setValue(null);
 
 		// Do Test

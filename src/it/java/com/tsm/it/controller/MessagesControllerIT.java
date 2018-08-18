@@ -22,9 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
@@ -248,9 +246,7 @@ public class MessagesControllerIT extends BaseTestIT {
     @Test
     public void save_InvalidSenderEmailGiven_ShouldReturnError() {
         // Set Up
-        Set<String> hosts = new HashSet<>();
-        hosts.add(host);
-        ClientResource client = ClientResource.build().headers(getTokenHeader()).hosts(hosts).create();
+        ClientResource client = ClientResource.build().headers(getTokenHeader()).create();
         MessageResource resource = MessageResource.build().assertFields().senderEmail("");
 
         // Do Test
@@ -273,10 +269,7 @@ public class MessagesControllerIT extends BaseTestIT {
     @Test
     public void save_SendEmailClientGiven_ShouldSendEmail() {
         // Set Up
-        Set<String> hosts = new HashSet<>();
-        hosts.add(host);
-        ClientResource client = ClientResource.build().emailRecipient(itTestEmail).headers(getTokenHeader())
-                .hosts(hosts).create();
+        ClientResource client = ClientResource.build().emailRecipient(itTestEmail).headers(getTokenHeader()).create();
         MessageResource resource = MessageResource.build().assertFields();
 
         // Do Test
@@ -294,10 +287,7 @@ public class MessagesControllerIT extends BaseTestIT {
     @Test
     public void findById_NotFoundClientGiven_ShouldReturnError() {
         // Set Up
-        Set<String> hosts = new HashSet<>();
-        hosts.add(host);
-        ClientResource client = ClientResource.build().emailRecipient(itTestEmail).headers(getTokenHeader())
-                .hosts(hosts).create();
+        ClientResource client = ClientResource.build().emailRecipient(itTestEmail).headers(getTokenHeader()).create();
         MessageResource resource = MessageResource.build().headers(getHeader()).create(client.getToken());
 
         // Do Test
@@ -310,10 +300,7 @@ public class MessagesControllerIT extends BaseTestIT {
     @Ignore
     public void findById_NotFoundMessageGiven_ShouldReturnError() {
         // Set Up
-        Set<String> hosts = new HashSet<>();
-        hosts.add(host);
-        ClientResource client = ClientResource.build().emailRecipient(itTestEmail).headers(getTokenHeader())
-                .hosts(hosts).create();
+        ClientResource client = ClientResource.build().emailRecipient(itTestEmail).headers(getTokenHeader()).create();
         MessageResource resource = MessageResource.build().create(client.getToken());
 
         // Do Test
@@ -326,10 +313,7 @@ public class MessagesControllerIT extends BaseTestIT {
     @Ignore
     public void findById_IdMessageFoundGiven_ShouldReturnMessage() {
         // Set Up
-        Set<String> hosts = new HashSet<>();
-        hosts.add(host);
-        ClientResource client = ClientResource.build().emailRecipient(itTestEmail).headers(getTokenHeader())
-                .hosts(hosts).create();
+        ClientResource client = ClientResource.build().emailRecipient(itTestEmail).headers(getTokenHeader()).create();
         MessageResource resource = MessageResource.build().create(client.getToken());
 
         // Do Test
@@ -369,9 +353,7 @@ public class MessagesControllerIT extends BaseTestIT {
         // Set Up
         Map<String, String> tokenMap = getTokenHeader();
         header.putAll(tokenMap);
-        Set<String> hosts = new HashSet<>();
-        hosts.add(host);
-        ClientResource client = ClientResource.build().emailRecipient(itTestEmail).headers(tokenMap).hosts(hosts).create();
+        ClientResource client = ClientResource.build().emailRecipient(itTestEmail).headers(tokenMap).create();
         MessageResource resource = MessageResource.build().headers(tokenMap).create(client.getToken());
 
         // Do Test
@@ -385,9 +367,7 @@ public class MessagesControllerIT extends BaseTestIT {
         // Set Up
         Map<String, String> tokenMap = getTokenHeader();
         header.putAll(tokenMap);
-        Set<String> hosts = new HashSet<>();
-        hosts.add(host);
-        ClientResource client = ClientResource.build().emailRecipient(itTestEmail).headers(tokenMap).hosts(hosts).create();
+        ClientResource client = ClientResource.build().emailRecipient(itTestEmail).headers(tokenMap).create();
         MessageResource resource = MessageResource.build().headers(tokenMap).create(client.getToken());
 
         // Do Test
@@ -401,9 +381,7 @@ public class MessagesControllerIT extends BaseTestIT {
         // Set Up
         Map<String, String> tokenMap = getTokenHeader();
         header.putAll(tokenMap);
-        Set<String> hosts = new HashSet<>();
-        hosts.add(host);
-        ClientResource client = ClientResource.build().emailRecipient(itTestEmail).headers(tokenMap).hosts(hosts).create();
+        ClientResource client = ClientResource.build().emailRecipient(itTestEmail).headers(tokenMap).create();
         MessageResource resource = MessageResource.build().headers(tokenMap).create(client.getToken());
 
         // Do Test

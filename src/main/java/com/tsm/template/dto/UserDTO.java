@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 
 import static com.tsm.template.util.ErrorCodes.*;
 
-public class UserResource implements BaseDTO {
+public class UserDTO implements BaseDTO {
 
 	@Getter
 	@Setter
@@ -35,7 +35,7 @@ public class UserResource implements BaseDTO {
 		if (obj.getClass() != getClass()) {
 			return false;
 		}
-		UserResource other = (UserResource) obj;
+		UserDTO other = (UserDTO) obj;
 		if (getEmail() == null || other.getEmail() == null) {
 			return false;
 		}
