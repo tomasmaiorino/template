@@ -18,6 +18,8 @@ import org.springframework.util.Assert;
 
 import lombok.Getter;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "message")
 public class Message extends BaseModel {
@@ -132,7 +134,7 @@ public class Message extends BaseModel {
         this.responseCode = responseCode;
     }
 
-    public Class<MessageStatus> getStatusEnum(){
+    public Class<MessageStatus> getStatusEnum() {
         return MessageStatus.class;
 
     }

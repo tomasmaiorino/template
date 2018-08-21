@@ -75,6 +75,7 @@ public class MessagesControllerIT extends BaseTestIT {
                 .header("Access-Control-Expose-Headers", is("Location"));
     }
 
+    @Ignore
     @Test
     public void save_NullMessageGiven_ShouldReturnError() {
         // Set Up
@@ -263,7 +264,7 @@ public class MessagesControllerIT extends BaseTestIT {
         // Do Test
         given().headers(header).body(resource).contentType(ContentType.JSON).when()
                 .post(MESSAGE_POST_URL, ClientTestBuilder.CLIENT_TOKEN).then()
-                .statusCode(HttpStatus.FORBIDDEN.value());
+                .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     @Test
@@ -287,11 +288,12 @@ public class MessagesControllerIT extends BaseTestIT {
     @Test
     public void findById_NotFoundClientGiven_ShouldReturnError() {
         // Set Up
+        Map<String, String> tokenHeader = getTokenHeader();
         ClientResource client = ClientResource.build().emailRecipient(itTestEmail).headers(getTokenHeader()).create();
-        MessageResource resource = MessageResource.build().headers(getHeader()).create(client.getToken());
+        MessageResource resource = MessageResource.build().headers(tokenHeader).create(client.getToken());
 
         // Do Test
-        given().headers(header).body(resource).contentType(ContentType.JSON).when()
+        given().headers(tokenHeader).body(resource).contentType(ContentType.JSON).when()
                 .get("/api/v1/messages/{clientToken}/{id}", ClientTestBuilder.CLIENT_TOKEN, resource.getId()).then()
                 .statusCode(HttpStatus.FORBIDDEN.value());
     }

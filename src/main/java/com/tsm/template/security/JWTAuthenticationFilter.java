@@ -24,31 +24,31 @@ import static com.tsm.template.security.SecurityConstants.EXPIRATION_TIME;
 
 
 public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
-	private AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
 
-	public JWTAuthenticationFilter(String url, AuthenticationManager authenticationManager) {
-		super(new AntPathRequestMatcher(url));
-		this.authenticationManager = authenticationManager;
-	}
+    public JWTAuthenticationFilter(String url, AuthenticationManager authenticationManager) {
+        super(new AntPathRequestMatcher(url));
+        this.authenticationManager = authenticationManager;
+    }
 
-	@Override
-	public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res)
-			throws AuthenticationException {
-		try {
-			User creds = new ObjectMapper().readValue(req.getInputStream(), User.class);
-			return authenticationManager.authenticate(
-					new UsernamePasswordAuthenticationToken(creds.getEmail(), creds.getPassword(), new ArrayList<>()));
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
+    @Override
+    public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res)
+            throws AuthenticationException {
+        try {
+            User creds = new ObjectMapper().readValue(req.getInputStream(), User.class);
+            return authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(creds.getEmail(), creds.getPassword(), new ArrayList<>()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-	@Override
-	protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain,
-											Authentication auth) throws IOException, ServletException {
-		String token = Jwts.builder().setSubject(((org.springframework.security.core.userdetails.User) auth.getPrincipal()).getUsername())
-				.setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-				.signWith(SignatureAlgorithm.HS512, "").compact();
-		res.addHeader(SecurityConstants.HEADER_STRING, token);
-	}
+    @Override
+    protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain,
+                                            Authentication auth) {
+        String token = Jwts.builder().setSubject(((org.springframework.security.core.userdetails.User) auth.getPrincipal()).getUsername())
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .signWith(SignatureAlgorithm.HS512, "").compact();
+        res.addHeader(SecurityConstants.HEADER_STRING, token);
+    }
 }

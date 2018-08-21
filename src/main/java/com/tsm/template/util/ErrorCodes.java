@@ -22,8 +22,6 @@ public abstract class ErrorCodes {
 
     public static final String REQUIRED_TOKEN = "requiredToken";
 
-    public static final String REQUIRED_HOSTS = "requiredHosts";
-
     public static final String REQUIRED_EMAIL_RECIPIENT = "requiredEmailRecipient";
 
     public static final String INVALID_TOKEN_SIZE = "invalidTokenSize";

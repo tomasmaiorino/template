@@ -2,6 +2,8 @@ package com.tsm.template.controller;
 
 
 import com.tsm.template.dto.MessageDTO;
+import com.tsm.template.exceptions.BadRequestException;
+import com.tsm.template.exceptions.ResourceNotFoundException;
 import com.tsm.template.mappers.IBaseMapper;
 import com.tsm.template.mappers.MessageMapper;
 import com.tsm.template.model.Client;
@@ -19,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import static com.tsm.template.util.ErrorCodes.CLIENT_NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -50,6 +53,8 @@ public class MessagesController extends RestBaseController<MessageDTO, Message, 
 
         Client client = clientService.findByToken(clientToken);
 
+        resource.setStatus(Message.MessageStatus.CREATED.name());
+
         Message message = mapper.toModel(resource, client);
 
         message = service.save(message);
@@ -67,7 +72,7 @@ public class MessagesController extends RestBaseController<MessageDTO, Message, 
                                HttpServletRequest request) {
         log.debug("Received a request to search for a message by id [{}] and client token [{}].", id, clientToken);
 
-        Client client = clientService.findByToken(clientToken);
+        Client client = recoverClient(clientToken);
 
         Message message = service.findByIdAndClient(id, client);
 
@@ -76,6 +81,16 @@ public class MessagesController extends RestBaseController<MessageDTO, Message, 
         log.debug("Returning resource [{}].", result);
 
         return result;
+    }
+
+    private Client recoverClient(final String token) {
+        Client client = null;
+        try {
+            client = clientService.findByToken(token);
+        } catch (ResourceNotFoundException re) {
+            throw new BadRequestException(CLIENT_NOT_FOUND);
+        }
+        return client;
     }
 
     @RequestMapping(method = GET, produces = JSON_VALUE, path = "/find")

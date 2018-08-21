@@ -53,6 +53,7 @@ public class MessageResource extends BaseItResource {
 		if (Objects.isNull(subject)) {
 			subject();
 		}
+
 		return this;
 	}
 

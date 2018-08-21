@@ -1,10 +1,11 @@
 package com.tsm.template.mappers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tsm.template.dto.MessageDTO;
 import com.tsm.template.model.Client;
 import com.tsm.template.model.Message;
+import io.jsonwebtoken.lang.Assert;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +18,12 @@ public class MessageMapper implements IBaseMapper<MessageDTO, Message> {
     private ModelMapper modelMapper;
 
     public Message toModel(MessageDTO dto, Client client) {
-        return null;
+        Assert.notNull(dto, "The dto must not be null.");
+        Assert.notNull(client, "The client must not be null.");
+
+        Message message = modelMapper.map(dto, Message.class);
+        message.setClient(client);
+        return message;
     }
 
     @Override

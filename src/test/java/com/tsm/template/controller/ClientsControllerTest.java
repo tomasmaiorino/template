@@ -2,7 +2,6 @@ package com.tsm.template.controller;
 
 import com.tsm.template.dto.ClientDTO;
 import com.tsm.template.exceptions.BadRequestException;
-import com.tsm.template.mappers.IBaseMapper;
 import com.tsm.template.model.Client;
 import com.tsm.template.service.ClientService;
 import com.tsm.template.util.ClientTestBuilder;
@@ -24,8 +23,8 @@ import javax.validation.Validator;
 import javax.validation.groups.Default;
 import java.util.Collections;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 
 @FixMethodOrder(MethodSorters.JVM)

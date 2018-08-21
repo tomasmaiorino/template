@@ -4,7 +4,7 @@ user:
     name: it user
     pass: 7c30110b
 
-it.test.email:
+it.test.email: user@test.com
 spring:
   jpa:
     show-sql: true
