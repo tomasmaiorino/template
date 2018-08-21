@@ -51,7 +51,7 @@ public class MessagesController extends RestBaseController<MessageDTO, Message, 
 
         validate(resource, Default.class);
 
-        Client client = clientService.findByToken(clientToken);
+        Client client = recoverClient(clientToken);
 
         resource.setStatus(Message.MessageStatus.CREATED.name());
 

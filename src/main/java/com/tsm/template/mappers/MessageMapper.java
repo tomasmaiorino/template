@@ -4,18 +4,26 @@ import com.tsm.template.dto.MessageDTO;
 import com.tsm.template.model.Client;
 import com.tsm.template.model.Message;
 import io.jsonwebtoken.lang.Assert;
+import org.apache.commons.lang3.StringUtils;
+import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.Set;
 
 @Component
 public class MessageMapper implements IBaseMapper<MessageDTO, Message> {
 
-    @Autowired
-    private ModelMapper modelMapper;
+
+    private ModelMapper modelMapper = createModelMapper();
+
+    private ModelMapper createModelMapper() {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.addConverter((Converter<Message.MessageStatus, String>) mappingContext -> Objects.nonNull(mappingContext.getSource()) ? mappingContext.getSource().name() : "");
+        modelMapper.addConverter((Converter<String, Message.MessageStatus>) mappingContext -> StringUtils.isNotBlank(mappingContext.getSource()) ? Message.MessageStatus.valueOf(mappingContext.getSource()) : null);
+        return modelMapper;
+    }
 
     public Message toModel(MessageDTO dto, Client client) {
         Assert.notNull(dto, "The dto must not be null.");

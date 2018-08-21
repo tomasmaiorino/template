@@ -60,21 +60,6 @@ public class MessagesControllerIT extends BaseTestIT {
         header.put("Referer", host);
     }
 
-    @Test
-    public void checking_preflight_ShouldReturnValidHeader() {
-        // Set Up
-        ClientResource client = ClientResource.build().headers(getTokenHeader()).create();
-
-        // Do Test
-        given().headers(header).when().options(MESSAGE_POST_URL, client.getToken()).then()
-                .statusCode(HttpStatus.OK.value())
-                .header("Access-Control-Allow-Origin", is(client.getHosts().iterator().next()))
-                .header("Access-Control-Allow-Methods", is("POST, GET, OPTIONS"))
-                .header("Access-Control-Max-Age", is("3600"))
-                .header("Access-Control-Allow-Headers", is("Origin, X-Requested-With, Content-Type, Accept"))
-                .header("Access-Control-Expose-Headers", is("Location"));
-    }
-
     @Ignore
     @Test
     public void save_NullMessageGiven_ShouldReturnError() {
@@ -276,7 +261,6 @@ public class MessagesControllerIT extends BaseTestIT {
         // Do Test
         given().headers(header).body(resource).contentType(ContentType.JSON).when()
                 .post(MESSAGE_POST_URL, client.getToken()).then().statusCode(HttpStatus.OK.value())
-                .header("Access-Control-Allow-Origin", is(client.getHosts().iterator().next()))
                 .header("Access-Control-Allow-Methods", is("POST, GET, OPTIONS"))
                 .header("Access-Control-Max-Age", is("3600"))
                 .header("Access-Control-Allow-Headers", is("Origin, X-Requested-With, Content-Type, Accept"))
@@ -295,7 +279,7 @@ public class MessagesControllerIT extends BaseTestIT {
         // Do Test
         given().headers(tokenHeader).body(resource).contentType(ContentType.JSON).when()
                 .get("/api/v1/messages/{clientToken}/{id}", ClientTestBuilder.CLIENT_TOKEN, resource.getId()).then()
-                .statusCode(HttpStatus.FORBIDDEN.value());
+                .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 
     @Test
@@ -370,7 +354,7 @@ public class MessagesControllerIT extends BaseTestIT {
         Map<String, String> tokenMap = getTokenHeader();
         header.putAll(tokenMap);
         ClientResource client = ClientResource.build().emailRecipient(itTestEmail).headers(tokenMap).create();
-        MessageResource resource = MessageResource.build().headers(tokenMap).create(client.getToken());
+        MessageResource.build().headers(tokenMap).create(client.getToken());
 
         // Do Test
         given().headers(header).contentType(ContentType.JSON).when().queryParam("search", "status:" + Message.MessageStatus.SENT)

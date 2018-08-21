@@ -3,6 +3,7 @@ package com.tsm.template;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tsm.template.dto.MessageDTO;
 import com.tsm.template.model.Message;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
@@ -14,24 +15,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.util.Objects;
 
 @SpringBootApplication
+@Slf4j
 public class TemplateApplication {
+
 
     @Bean
     public ModelMapper getModelMapper() {
-        ModelMapper modelMapper = new ModelMapper();
-        modelMapper.addMappings(new PropertyMap<MessageDTO, Message>() {
-            @Override
-            protected void configure() {
-                map().setStatus(Objects.nonNull(source) && StringUtils.isNotBlank(source.getStatus()) ? Message.MessageStatus.valueOf(source.getStatus()) : Message.MessageStatus.CREATED);
-            }
-        });
-        modelMapper.addMappings(new PropertyMap<Message, MessageDTO>() {
-            @Override
-            protected void configure() {
-                map().setStatus(Objects.nonNull(source) && Objects.nonNull(source.getStatus()) ? source.getStatus().name() : "");
-            }
-        });
-        return modelMapper;
+        return new ModelMapper();
     }
 
     @Bean
